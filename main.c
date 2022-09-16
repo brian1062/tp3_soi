@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
             isJ++;
         }
         if(strcmp(argv[i],"-d")==0){
-            isJ++;
+            isD++;
         }
     }
     if(isS>=1){
@@ -37,20 +37,17 @@ int main(int argc, char const *argv[])
     }
     if(isJ>=1){isJ--;}
     if(isD>=1){
-        void (*fileSysInf)();
         void* fsys= dlopen("libfsys.so",RTLD_LAZY);
-
+        void (*fileSysInf)();
         if(fsys==NULL){
             fprintf(stderr,"%s",dlerror());
             exit(EXIT_FAILURE);
         }
         //basado en el ejemplo del man dlopen
-        *(void **) (&fileSysInf) = dlsym(fsys, "fileSystemInfo_cJSON");
-
-        (*fileSysInf());
+        *(void **) (&fileSysInf) = dlsym(fsys, "fileSysInf");
+        (*fileSysInf)();
         dlclose(fsys);
     }
-
 
     return 0;
 }
